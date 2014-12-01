@@ -25,20 +25,44 @@ namespace strange.examples.strangerobots.game
 				injectionBinder.Unbind<ShipView> (GameElement.PLAYER_SHIP);
 
 			//add the player's ship
-			GameObject shipStyle = Resources.Load<GameObject> ("Doctor"/* GameElement.PLAYER_SHIP.ToString() */);
+			GameObject playerStyle = Resources.Load<GameObject> ("Doctor"/* GameElement.PLAYER_SHIP.ToString() */);
+			//Add the controls
+			GameObject controlsStyle = Resources.Load<GameObject> ("move_arrows");
 
 			//shipStyle.transform.localScale = Vector3.one;
 
-			GameObject shipGO = GameObject.Instantiate (shipStyle) as GameObject;
-			shipGO.transform.localPosition = Vector3.zero;
-			shipGO.layer = LayerMask.NameToLayer("player");
+			GameObject playerGO = GameObject.Instantiate (playerStyle) as GameObject;
+			GameObject constrolsGO = GameObject.Instantiate (controlsStyle) as GameObject;
 
-			shipGO.transform.parent = gameField.transform;
+			float xPos = (gameModel.currentLevel.player.y + .5f - (gameModel.currentLevel.height * .5f)) * gameModel.currentLevel.magnifier;
+			float zPos = (gameModel.currentLevel.player.x + .5f - (gameModel.currentLevel.width * .5f)) * gameModel.currentLevel.magnifier;
+			Vector3 pos = new Vector3 (xPos, 0f, zPos);
 
-			injectionBinder.Bind<ShipView> ().ToValue (shipGO.GetComponent<ShipView> ()).ToName (GameElement.PLAYER_SHIP);
+
+			playerGO.transform.localPosition = pos;
+			constrolsGO.transform.localPosition = pos;
+
+			ChangeLayersRecursively(playerGO.transform, "player");
+			ChangeLayersRecursively(constrolsGO.transform, "control");
+
+			playerGO.transform.parent = gameField.transform;
+			constrolsGO.transform.parent = gameField.transform;
+
+			constrolsGO.GetComponent<ControlsView>().target = playerGO.transform;
+
+			injectionBinder.Bind<ShipView> ().ToValue (playerGO.GetComponent<ShipView> ()).ToName (GameElement.PLAYER_SHIP);
 
 			//Whenever a ship is created, the game is on!
 			gameModel.levelInProgress = true;
+		}
+
+		void ChangeLayersRecursively(Transform trans, string name)
+		{
+			trans.gameObject.layer = LayerMask.NameToLayer(name);
+			foreach (Transform child in trans)
+			{
+				ChangeLayersRecursively(child, name);
+			}
 		}
 	}
 }

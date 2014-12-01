@@ -1,72 +1,133 @@
-﻿//An Enemy can be destroyed in one of three ways:
-//1. The player's missile can strike it, earning the player points.
-//2. The Enemy can fly offscreen.
-//3. The Enemy may simply be cleaned up if left behind at the end of a level.
+//A Rock is destroyed if it is struck by a player missile.
+//It may also get removed during cleanup when re-starting the game.
 
-//We're using pooling, so Enemies are never really "destroyed". We just move
-//them offscreen and reset them until we need one again. This is more memory
-//and performance friendly than the constant creation/destruction of Objects.
+//One could make a pretty good argument that this Command should in fact be broken into three:
+//1. Tabulate points.
+//2. Destroy the Rock.
+//3. Determine if the level is complete.
+
+//I chose not to do that in this case (a bit lazy, to be honest). If I did, it would be a fairly simple matter,
+//and probably better, since I'd be doing the single-responsibility thing far more cleanly.
+//In the GameContext, I'd re-write the binding something like this:
+
+//Currently:
+//commandBinder.Bind<DestroyEnemySignal>().To<DestroyEnemyCommand>().Pooled();
+
+//Rewritten:
+//commandBinder.Bind<DestroyRockSignal>()
+//		.To<ScoreByRockCommand>()
+//		.To<DestroyRockCommand>()
+//		.To<CheckLevelEndCommand>()
+//		.InSequence()
+//		.Pooled();
 
 using System;
 using strange.extensions.command.impl;
 using UnityEngine;
+using System.Collections;
 using strange.extensions.pool.api;
 
 namespace strange.examples.strangerobots.game
 {
 	public class DestroyEnemyCommand : Command
 	{
-		//The pool to which we return the enemies
-		[Inject(GameElement.ENEMY_POOL)]
-		public IPool<GameObject> pool{ get; set; }
+		[Inject(GameElement.GAME_FIELD)]
+		public GameObject gameField{ get; set; }
 
-		//Keeper of score, level, etc.
+		//A reference to the specific rock
+		[Inject]
+		public EnemyView enemyView{ get; set; }
+
+		//Does this destruction earn the player points?
+		[Inject]
+		public bool isPointEarning{ get; set; }
+
+		//For score-keeping
 		[Inject]
 		public IGameModel gameModel{ get; set; }
 
-		//The specific enemy being destroyed
+		//We run a brief coroutine after destruction to test whether all Rocks have been destroyed
 		[Inject]
-		public EnemyView enemyView{get;set;}
+		public IRoutineRunner routineRunner{ get; set; }
 
-		//True if this destruction earns the player points (False if it flew offscreen
-		//or was cleaned up at end of level)
-		[Inject]
-		public bool isPointEarning{ get; set; }
-		
+		//We're drawing instances from a pool, instead of wasting our resources.
+		[Inject(GameElement.ENEMY_POOL)]
+		public IPool<GameObject> pool{ get; set; }
+
 		[Inject]
 		public UpdateScoreSignal updateScoreSignal{ get; set; }
 
 		[Inject]
+		public CreateEnemySignal createEnemySignal{ get; set; }
+
+		[Inject]
+		public LevelEndSignal levelEndSignal{ get; set; }
+
+		[Inject]
 		public IGameConfig gameConfig{ get; set; }
-		
-		//An offscreen location to place the recycled Enemies.
-		//Arguably this value should be in a config somewhere.
+
 		private static Vector3 PARKED_POS = new Vector3(1000f, 0f, 1000f);
+
 
 		public override void Execute ()
 		{
 			if (isPointEarning)
 			{
-				//Give us some points
-				int level = enemyView.level;
-
 				//NOTE: arguably all the point-earning from destroying Rocks and Enemies
 				//should be offloaded to a set of ScoreCommands. Certainly in a more complex game,
 				//You'd do yourself a favor by centralizing the tabulation of scores.
-				gameModel.score += gameConfig.baseEnemyScore * level;
+				int level = gameModel.level;
+
+				gameModel.score += gameConfig.baseRockScore * level;
 				updateScoreSignal.Dispatch (gameModel.score);
+
+				Vector3 pos = enemyView.transform.position;
+				GameObject explosionStyle = Resources.Load<GameObject> ("player_explosion");
+				GameObject explosionGO = GameObject.Instantiate (explosionStyle) as GameObject;
+
+				explosionGO.transform.localPosition = pos;
+				explosionGO.transform.parent = gameField.transform;
 			}
 
 			//We're pooling instances, not actually destroying them,
 			//So reset the instances to an appropriate state for reuse...
 			enemyView.rigidbody.velocity = Vector3.zero;
+			enemyView.rigidbody.angularVelocity = Vector3.zero;
 			enemyView.gameObject.SetActive (false);
 
-			//...store them offscreen...
+			//...and store them offscreen
 			enemyView.transform.localPosition = PARKED_POS;
-
-			//...and RETURN THEM TO THE POOL!
 			pool.ReturnInstance (enemyView.gameObject);
+
+			if (isPointEarning)
+			{
+				//If this was the player destroying a rock, pause...
+				Retain ();
+				routineRunner.StartCoroutine (checkEnemies ());
+			}
+		}
+
+		//...then test if we've destroyed them all.
+		public IEnumerator checkEnemies()
+		{
+			//A one-frame delay is necessary to ensure the gameField's view has cleaned up the destroyed rock.
+			yield return null;
+
+			EnemyView[] enemies = gameField.GetComponentsInChildren<EnemyView> ();
+			bool levelCleared = true;
+			foreach (EnemyView enemy in enemies)
+			{
+				if (enemy.gameObject.activeSelf)
+				{
+					levelCleared = false;
+				}
+			}
+			if (levelCleared)
+			{
+				levelEndSignal.Dispatch ();
+			}
+
+			Release ();
 		}
 	}
 }

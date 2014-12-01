@@ -39,17 +39,16 @@ namespace strange.examples.strangerobots.game
 
 				float halfW = (float)w * .5f;
 				float halfH = (float)h * .5f;
-				float mod = 5f;
 
 				int a = 0;
 				for (int x = 0; x < w; x++) {
 					for (int y = 0; y < h; y++) {
 						a++;
-						float xPos = ((float)x + .5f - halfW) * mod;
-						float yPos = ((float)y + .5f - halfH) * mod;
+						float zPos = ((float)x + .5f - halfW) * level.magnifier;
+						float xPos = ((float)y + .5f - halfH) * level.magnifier;
 
 						GameObject tile = (a % 2 == 0) ? evenTile : oddTile;
-						GameObject newTile = GameObject.Instantiate(tile, new Vector3(xPos, 0f, yPos), Quaternion.identity) as GameObject;
+						GameObject newTile = GameObject.Instantiate(tile, new Vector3(xPos, 0f, zPos), Quaternion.identity) as GameObject;
 						newTile.transform.parent = gameField.transform;
 					}
 				}

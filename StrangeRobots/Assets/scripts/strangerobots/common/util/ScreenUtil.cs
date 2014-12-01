@@ -1,4 +1,4 @@
-﻿//Utility class providing Camera/GameObject mapping capabilities
+//Utility class providing Camera/GameObject mapping capabilities
 
 using System;
 using UnityEngine;
@@ -25,7 +25,7 @@ namespace strange.examples.strangerobots
 	public class ScreenUtil : IScreenUtil
 	{
 		//The camera in use by the Context
-		[Inject(StrangeRocksElement.GAME_CAMERA)]
+		[Inject(StrangeRobotsElement.GAME_CAMERA)]
 		public Camera gameCamera{ get; set; }
 
 		//Get a rect that represents the provided values as a percentage of the screen
@@ -123,6 +123,32 @@ namespace strange.examples.strangerobots
 			Vector3 retv = new Vector3 (x, y, gameCamera.transform.localPosition.y);
 			retv = gameCamera.ViewportToWorldPoint (retv);
 			return retv;
+		}
+
+		public Vector3 FillFrustum(float width, float height) {
+			float distance = 0;
+
+			if (width/height > gameCamera.aspect)
+			{
+				distance = width * 0.5f / Mathf.Tan(gameCamera.fieldOfView * 0.5f * Mathf.Deg2Rad);
+			} 
+			else
+			{
+				distance = height * 0.5f / Mathf.Tan(gameCamera.fieldOfView * 0.5f * Mathf.Deg2Rad);
+			}
+
+			Debug.Log (distance);
+			Debug.Log (gameCamera.aspect);
+
+			float frustumHeight = 2.0f * distance * Mathf.Tan(gameCamera.fieldOfView * 0.5f * Mathf.Deg2Rad);
+			float frustumWidth = frustumHeight * gameCamera.aspect;
+
+			float theta = (0f) * Mathf.Deg2Rad;	//gameCamera.transform.rotation.eulerAngles.x
+
+			float xDest = Mathf.Sin(theta) * distance;
+			float yDest = Mathf.Cos(theta) * distance;
+
+			return new Vector3(xDest, yDest, 0f);
 		}
 	}
 }

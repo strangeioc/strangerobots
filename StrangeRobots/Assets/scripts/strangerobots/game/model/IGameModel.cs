@@ -18,6 +18,8 @@ namespace strange.examples.strangerobots.game
 		int level{ get; set; }
 
 		bool levelInProgress{ get; set; }
+
+		LevelModel currentLevel { get; set; }
 	}
 }
 

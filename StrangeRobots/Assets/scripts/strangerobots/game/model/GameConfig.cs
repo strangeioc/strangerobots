@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace strange.examples.strangerobots.game
@@ -34,20 +35,26 @@ namespace strange.examples.strangerobots.game
 
 			for (int a  = 0; a < lvls.Count; a++)
 			{
+				float magnifier = lvls[a]["magnifier"].AsFloat;
 				int width = lvls[a]["dimensions"]["width"].AsInt;
 				int height = lvls[a]["dimensions"]["height"].AsInt;
 
 				SimpleJSON.JSONArray nms = lvls[a]["enemies"].AsArray;
-				ArrayList enemies = new ArrayList();
+				List<ObjectStatus> enemies = new List<ObjectStatus>();
 
 				for (int b = 0; b < nms.Count; b++) {
 					int x = nms[b]["x"].AsInt;
 					int y = nms[b]["y"].AsInt;
-					enemies.Add(new EnemyInit(x, y));
+					enemies.Add(new ObjectStatus(x, y));
 				}
 
+				int playerX = lvls[a]["player"]["x"].AsInt;
+				int playerY = lvls[a]["player"]["y"].AsInt;
+				ObjectStatus player = new ObjectStatus(playerX, playerY);
 
-				levels.Add(new LevelConfig(width, height, enemies));
+
+
+				levels.Add(new LevelConfig(magnifier, width, height, enemies, player));
 
 			}
 		}

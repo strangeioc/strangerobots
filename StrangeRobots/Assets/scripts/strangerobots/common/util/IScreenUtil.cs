@@ -17,6 +17,8 @@ namespace strange.examples.strangerobots
 		Vector3 RandomPositionOnLeft();
 
 		Vector3 GetAnchorPosition(ScreenAnchor horizontal, ScreenAnchor vertical);
+
+		Vector3 FillFrustum(float width, float height);
 	}
 }
 

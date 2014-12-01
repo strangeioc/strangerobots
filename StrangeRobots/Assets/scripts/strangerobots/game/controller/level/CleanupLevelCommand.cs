@@ -1,4 +1,4 @@
-﻿//At the end of a level (and once at the start of the game), make sure we put all our toys away
+//At the end of a level (and once at the start of the game), make sure we put all our toys away
 
 using System;
 using strange.extensions.command.impl;
@@ -15,13 +15,7 @@ namespace strange.examples.strangerobots.game
 		public DestroyPlayerSignal destroyPlayerSignal{ get; set; }
 
 		[Inject]
-		public DestroyRockSignal destroyRockSignal{ get; set; }
-
-		[Inject]
 		public DestroyEnemySignal destroyEnemySignal{ get; set; }
-
-		[Inject]
-		public DestroyMissileSignal destroyMissileCommand{ get; set; }
 
 		public override void Execute()
 		{
@@ -33,25 +27,10 @@ namespace strange.examples.strangerobots.game
 			}
 
 			//Clean up rocks
-			RockView[] rocks = gameField.GetComponentsInChildren<RockView> ();
-			foreach (RockView rock in rocks)
+			EnemyView[] rocks = gameField.GetComponentsInChildren<EnemyView> ();
+			foreach (EnemyView rock in rocks)
 			{
-				destroyRockSignal.Dispatch (rock, false);
-			}
-
-			//Clean up enemies
-			EnemyView[] enemies = gameField.GetComponentsInChildren<EnemyView> ();
-			foreach (EnemyView enemy in enemies)
-			{
-				destroyEnemySignal.Dispatch (enemy, false);
-			}
-
-			//Clean up missiles
-			MissileView[] missiles = gameField.GetComponentsInChildren<MissileView> ();
-			foreach (MissileView missile in missiles)
-			{
-				GameElement id = (missile.gameObject.name.IndexOf ("enemy") > -1) ? GameElement.ENEMY_MISSILE_POOL : GameElement.MISSILE_POOL;
-				destroyMissileCommand.Dispatch (missile, id);
+				destroyEnemySignal.Dispatch (rock, false);
 			}
 		}
 	}

@@ -15,16 +15,15 @@ namespace strange.examples.strangerobots.game
 		//View
 		[Inject]
 		public ShipView view { get; set; }
-
-		//Signals
-		[Inject]
-		public GameInputSignal gameInputSignal{ get; set; }
-
-		[Inject]
-		public FireMissileSignal fireMissileSignal{ get; set; }
-
+		
 		[Inject]
 		public DestroyPlayerSignal destroyPlayerSignal{ get; set; }
+		
+		[Inject]
+		public PlayerEndAnimationSignal playerEndAnimationSignal{ get; set; }
+		
+		[Inject]
+		public StartTurnSignal startTurnSignal { get; set; }
 
 		//This is the first (important) thing to happen in the Mediator. It tells
 		//you that your mediator has been attached, so it's like Start() or a
@@ -32,7 +31,8 @@ namespace strange.examples.strangerobots.game
 		public override void OnRegister ()
 		{
 			view.collisionSignal.AddListener (onCollision);
-			gameInputSignal.AddListener (onGameInput);
+			view.endAnimationSignal.AddListener (onEndAnimation);
+
 			view.Init ();
 		}
 
@@ -40,24 +40,17 @@ namespace strange.examples.strangerobots.game
 		public override void OnRemove ()
 		{
 			view.collisionSignal.RemoveListener (onCollision);
-			gameInputSignal.RemoveListener (onGameInput);
-		}
-
-		//Receive a signal updating GameInput
-		private void onGameInput(int input)
-		{
-			view.SetAction (input);
-
-			if ((input & GameInputEvent.FIRE) > 0)
-			{
-				fireMissileSignal.Dispatch (gameObject, GameElement.MISSILE_POOL);
-			}
+			view.endAnimationSignal.RemoveListener (onEndAnimation);
 		}
 
 		//When the View collides with something, dispatch the appropriate signal
 		private void onCollision()
 		{
 			destroyPlayerSignal.Dispatch (view, false);
+		}
+
+		private void onEndAnimation() {
+			playerEndAnimationSignal.Dispatch ();
 		}
 	}
 }

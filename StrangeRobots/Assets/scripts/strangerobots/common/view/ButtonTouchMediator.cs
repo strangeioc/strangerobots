@@ -1,4 +1,4 @@
-﻿//Mediates the ButtonView on devices
+//Mediates the ButtonView on devices
 
 using System;
 using UnityEngine;
@@ -11,7 +11,7 @@ namespace strange.examples.strangerobots.ui
 		[Inject]
 		public ButtonView view{ get; set; }
 
-		[Inject(StrangeRocksElement.GAME_CAMERA)]
+		[Inject(StrangeRobotsElement.GAME_CAMERA)]
 		public Camera gameCamera{ get; set; }
 
 		#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IPHONE)

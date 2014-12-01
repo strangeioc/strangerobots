@@ -20,30 +20,31 @@ namespace strange.examples.strangerobots.game
 		public CreatePlayerSignal createPlayerSignal{ get; set; }
 
 		[Inject]
-		public CreateRockSignal createRockSignal{ get; set; }
+		public CreateEnemySignal createEnemySignal{ get; set; }
 
 		[Inject]
 		public IGameConfig gameConfig{ get; set; }
 
 		public override void Execute ()
 		{
-			createPlayerSignal.Dispatch ();
+			ILevelConfig levelConfig = gameConfig.getLevel (gameModel.level);
+			gameModel.currentLevel = new LevelModel (levelConfig);
 
-			ILevelConfig level = gameConfig.getLevel (gameModel.level);
+			var halfW = (float)gameModel.currentLevel.width * .5f;
+			var halfH = (float)gameModel.currentLevel.height * .5f;
 
-			var halfW = (float)level.width * .5f;
-			var halfH = (float)level.height * .5f;
-
-			int enemyCount = level.enemies.Count;
+			int enemyCount = gameModel.currentLevel.enemies.Count;
 			for (int a = 0; a < enemyCount; a++)
 			{
-				var enemy = (EnemyInit)level.enemies[a];
-				float x = (enemy.x + .5f - halfW) * 5f;
-				float y = (enemy.y + .5f - halfH) * 5f;
-				Vector3 pos = new Vector3 (x, 0f, y);
+				var enemy = (ObjectStatus)gameModel.currentLevel.enemies[a];
+				float xPos = (enemy.y + .5f - halfH) * gameModel.currentLevel.magnifier;
+				float zPos = (enemy.x + .5f - halfW) * gameModel.currentLevel.magnifier;
+			
+				Vector3 pos = new Vector3 (xPos, 0f, zPos);
 
-				createRockSignal.Dispatch (1, pos);
+				createEnemySignal.Dispatch (enemy, 1, pos);
 			}
+			createPlayerSignal.Dispatch ();
 		}
 	}
 }

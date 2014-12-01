@@ -29,6 +29,8 @@ namespace strange.examples.strangerobots.game
 
 		public bool levelInProgress{ get; set; }
 
+		public LevelModel currentLevel { get; set; }
+
 		#endregion
 	}
 }

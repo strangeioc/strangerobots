@@ -1,4 +1,4 @@
-﻿//The Context for our UI.
+//The Context for our UI.
 
 using System;
 using UnityEngine;
@@ -88,7 +88,7 @@ namespace strange.examples.strangerobots.ui
 			{
 				throw new Exception ("Couldn't find the UI camera");
 			}
-			injectionBinder.Bind<Camera> ().ToValue (cam).ToName (StrangeRocksElement.GAME_CAMERA);
+			injectionBinder.Bind<Camera> ().ToValue (cam).ToName (StrangeRobotsElement.GAME_CAMERA);
 
 			//Don't forget to call the base version...important stuff happens there!!!
 			base.postBindings ();

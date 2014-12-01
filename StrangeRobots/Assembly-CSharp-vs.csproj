@@ -229,7 +229,6 @@
     </Reference>
     <Compile Include="Assets\scripts\strangerobots\common\config\CommonSignal.cs" />
     <Compile Include="Assets\scripts\strangerobots\common\config\SignalContext.cs" />
-    <Compile Include="Assets\scripts\strangerobots\common\config\StrangeRocksElement.cs" />
     <Compile Include="Assets\scripts\strangerobots\common\controller\ResourceInstanceProvider.cs" />
     <Compile Include="Assets\scripts\strangerobots\common\util\IRoutineRunner.cs" />
     <Compile Include="Assets\scripts\strangerobots\common\util\IScreenUtil.cs" />
@@ -247,10 +246,6 @@
     <Compile Include="Assets\scripts\strangerobots\game\controller\GameModuleStartCommand.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\controller\ISpawner.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\controller\StartGameCommand.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\controller\enemy\CreateEnemyCommand.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\controller\enemy\CreateEnemySpawnerCommand.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\controller\enemy\DestroyEnemyCommand.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\controller\enemy\EnemySpawner.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\controller\input\GameInputEvent.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\controller\input\IInput.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\controller\input\KeyboardInput.cs" />
@@ -260,31 +255,16 @@
     <Compile Include="Assets\scripts\strangerobots\game\controller\level\LevelEndCommand.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\controller\level\SetupLevelCommand.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\controller\level\StartLevelCommand.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\controller\missile\DestroyMissileCommand.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\controller\missile\FireMissileCommand.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\controller\missile\MissileHitCommand.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\controller\player\CreatePlayerCommand.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\controller\player\DestroyPlayerCommand.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\controller\rock\CreateRockCommand.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\controller\rock\DestroyRockCommand.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\model\GameConfig.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\model\GameModel.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\model\IGameConfig.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\model\IGameModel.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\view\EnemyMediator.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\view\EnemyMissileMediator.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\view\EnemyMissileView.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\view\EnemyView.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\view\ExplosionMediator.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\view\ExplosionView.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\view\GameDebugMediator.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\view\GameDebugView.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\view\MissileExplosionMediator.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\view\MissileExplosionView.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\view\MissileMediator.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\view\MissileView.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\view\RockMediator.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\view\RockView.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\view\ShipMediator.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\view\ShipView.cs" />
     <Compile Include="Assets\scripts\strangerobots\main\MainBootstrap.cs" />
@@ -305,6 +285,24 @@
     <Compile Include="Assets\scripts\strangerobots\ui\view\StartLevelPanelView.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\model\ILevelConfig.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\model\LevelConfig.cs" />
+    <Compile Include="Assets\scripts\strangerobots\game\controller\view\MatchCameraToFieldCommand.cs" />
+    <Compile Include="Assets\scripts\strangerobots\game\view\CameraView.cs" />
+    <Compile Include="Assets\scripts\strangerobots\game\view\EnemyView.cs" />
+    <Compile Include="Assets\scripts\strangerobots\game\controller\enemy\CreateEnemyCommand.cs" />
+    <Compile Include="Assets\scripts\strangerobots\game\controller\enemy\DestroyEnemyCommand.cs" />
+    <Compile Include="Assets\scripts\strangerobots\common\config\StrangeRobotsElement.cs" />
+    <Compile Include="Assets\scripts\strangerobots\game\controller\player\TurnPlayerCommand.cs" />
+    <Compile Include="Assets\scripts\strangerobots\game\controller\player\MovePlayerCommand.cs" />
+    <Compile Include="Assets\scripts\strangerobots\game\controller\enemy\MoveEnemiesCommand.cs" />
+    <Compile Include="Assets\scripts\strangerobots\game\model\LevelModel.cs" />
+    <Compile Include="Assets\scripts\strangerobots\game\model\ObjectStatus.cs" />
+    <Compile Include="Assets\scripts\strangerobots\game\view\ControlsView.cs" />
+    <Compile Include="Assets\scripts\strangerobots\game\view\ControlsMediator.cs" />
+    <Compile Include="Assets\scripts\strangerobots\game\controller\StartTurnCommand.cs" />
+    <Compile Include="Assets\scripts\strangerobots\game\view\GamePieceView.cs" />
+    <Compile Include="Assets\scripts\strangerobots\game\view\EnemyMediator.cs" />
+    <Compile Include="Assets\scripts\strangerobots\game\util\GameUtil.cs" />
+    <Compile Include="Assets\scripts\strangerobots\game\controller\EndTurnCommand.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -314,4 +312,8 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Assets\scripts\strangerobots\game\controller\view\" />
+    <Folder Include="Assets\scripts\strangerobots\game\util\" />
+  </ItemGroup>
 </Project>

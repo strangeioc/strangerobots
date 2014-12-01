@@ -1,31 +1,30 @@
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 namespace strange.examples.strangerobots.game
 {
-	public struct EnemyInit {
-		public int x;
-		public int y;
-
-		public EnemyInit(int xx, int yy) {
-			x = xx;
-			y = yy;
-		}
-	}
-
-
 	public class LevelConfig : ILevelConfig
 	{
+		private float _magnifier;
 		private int _width;
 		private int _height;
-		private ArrayList _enemies;
+		private List<ObjectStatus> _enemies;
+		private ObjectStatus _player;
 
 
-		public LevelConfig (int width, int height, ArrayList enemies)
+		public LevelConfig (float magnifier, int width, int height, List<ObjectStatus> enemies, ObjectStatus player)
 		{
+			_magnifier = magnifier;
 			_width = width;
 			_height = height;
 			_enemies = enemies;
+			_player = player;
+		}
+
+		public float magnifier { 
+			get {
+				return _magnifier;
+			}
 		}
 
 		public int width{
@@ -40,9 +39,15 @@ namespace strange.examples.strangerobots.game
 			}
 		}
 		
-		public ArrayList enemies{ 
+		public List<ObjectStatus> enemies{ 
 			get {
 				return _enemies;
+			}
+		}
+
+		public ObjectStatus player {
+			get {
+				return _player;
 			}
 		}
 	}
