@@ -91,8 +91,7 @@ namespace strange.examples.strangerobots.game
 
 			//We're pooling instances, not actually destroying them,
 			//So reset the instances to an appropriate state for reuse...
-			enemyView.rigidbody.velocity = Vector3.zero;
-			enemyView.rigidbody.angularVelocity = Vector3.zero;
+			enemyView.ResetAll();
 			enemyView.gameObject.SetActive (false);
 
 			//...and store them offscreen
@@ -126,7 +125,6 @@ namespace strange.examples.strangerobots.game
 			{
 				levelEndSignal.Dispatch ();
 			}
-
 			Release ();
 		}
 	}

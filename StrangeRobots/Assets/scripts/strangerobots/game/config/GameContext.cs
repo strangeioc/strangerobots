@@ -122,17 +122,15 @@ namespace strange.examples.strangerobots.game
 			//Command only fires AFTER the first one has completed. This is especially
 			//Useful for asynchronous calls, such as server communication.
 			commandBinder.Bind<LevelStartSignal> ()
-				.To<CreateGameFieldCommand>()
-				.To<CleanupLevelCommand>()
+				.To<CleanupLevelCommand> ()
+				.To<CreateGameFieldCommand> ()
+				.To<SetupLevelCommand> ()
 				.To<StartLevelCommand> ()
 				.To<MatchCameraToFieldCommand>()
 				.InSequence();
 			commandBinder.Bind<LevelEndSignal> ()
-				.To<CleanupLevelCommand>()
 				.To<LevelEndCommand> ()
 				.InSequence();
-			commandBinder.Bind<SetupLevelSignal> ()
-				.To<SetupLevelCommand> ();
 			commandBinder.Bind<StartTurnSignal> ()
 				.To<StartTurnCommand>()
 				.To<MovePlayerCommand>()

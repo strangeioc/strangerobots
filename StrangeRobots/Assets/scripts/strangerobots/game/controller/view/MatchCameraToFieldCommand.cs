@@ -22,6 +22,7 @@ namespace strange.examples.strangerobots.game
 		public Camera gameCamera{ get; set; }
 
 		public override void Execute() {
+			gameCamera.gameObject.GetComponent<CameraView> ().ResetPosition ();
 			ILevelConfig level = config.getLevel (gameModel.level);
 			Vector3 dest = screenUtil.FillFrustum (level.width * 5f, level.height * 5f);
 			gameCamera.gameObject.GetComponent<CameraView> ().GoToPosition (dest);

@@ -8,8 +8,6 @@ namespace strange.examples.strangerobots.game
 {
 	public class CleanupLevelCommand : Command
 	{
-		[Inject(GameElement.GAME_FIELD)]
-		public GameObject gameField{ get; set; }
 
 		[Inject]
 		public DestroyPlayerSignal destroyPlayerSignal{ get; set; }
@@ -19,18 +17,31 @@ namespace strange.examples.strangerobots.game
 
 		public override void Execute()
 		{
-			//Clean up the Player's ship
-			if (injectionBinder.GetBinding<ShipView> (GameElement.PLAYER_SHIP) != null)
+			if (injectionBinder.GetBinding<GameObject> (GameElement.GAME_FIELD) != null)
 			{
-				ShipView shipView = injectionBinder.GetInstance<ShipView> (GameElement.PLAYER_SHIP);
-				destroyPlayerSignal.Dispatch (shipView, true);
-			}
+				GameObject gameField = injectionBinder.GetInstance<GameObject> (GameElement.GAME_FIELD);
 
-			//Clean up rocks
-			EnemyView[] rocks = gameField.GetComponentsInChildren<EnemyView> ();
-			foreach (EnemyView rock in rocks)
-			{
-				destroyEnemySignal.Dispatch (rock, false);
+				//Clean up the Player's ship
+				if (injectionBinder.GetBinding<ShipView> (GameElement.PLAYER_SHIP) != null)
+				{
+					ShipView shipView = injectionBinder.GetInstance<ShipView> (GameElement.PLAYER_SHIP);
+					destroyPlayerSignal.Dispatch (shipView, true);
+				}
+				
+				//Clean up rocks
+				EnemyView[] enemies = gameField.GetComponentsInChildren<EnemyView> ();
+				foreach (EnemyView enemy in enemies)
+				{
+					destroyEnemySignal.Dispatch (enemy, false);
+				}
+				
+				//Clean up gameboard
+				Transform[] remaining = gameField.GetComponentsInChildren<Transform>();
+				foreach (Transform item in remaining)
+				{
+					if (item.gameObject != gameField)
+						GameObject.Destroy(item.gameObject);
+				}
 			}
 		}
 	}

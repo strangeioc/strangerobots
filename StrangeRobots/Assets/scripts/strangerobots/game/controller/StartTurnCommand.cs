@@ -17,6 +17,9 @@ namespace strange.examples.strangerobots.game
 		
 		public override void Execute ()
 		{
+			Debug.Log ("gameModel.level " + gameModel.level);
+
+
 			LevelModel level = gameModel.currentLevel;
 			ObjectStatus player = level.player;
 

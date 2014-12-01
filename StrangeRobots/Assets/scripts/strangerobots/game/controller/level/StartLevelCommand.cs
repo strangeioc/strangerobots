@@ -15,14 +15,10 @@ namespace strange.examples.strangerobots.game
 		public LevelStartedSignal levelStartedSignal{ get; set; }
 
 		[Inject]
-		public SetupLevelSignal setupLevelSignal{ get; set; }
-
-		[Inject]
 		public UpdateLivesSignal updateLivesSignal{ get; set; }
 
 		public override void Execute ()
 		{
-			setupLevelSignal.Dispatch ();
 			gameModel.levelInProgress = true;
 			levelStartedSignal.Dispatch ();
 			updateLivesSignal.Dispatch (gameModel.lives);

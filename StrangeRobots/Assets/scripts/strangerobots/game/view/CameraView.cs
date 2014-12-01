@@ -18,6 +18,9 @@ namespace strange.examples.strangerobots.game
 		private Quaternion startRot;
 		private Quaternion endRot;
 
+		private Vector3 initPosition;
+		private Quaternion initRotation;
+
 
 		private float startTime = 0;
 		private float journeyDistance = 0;
@@ -30,11 +33,16 @@ namespace strange.examples.strangerobots.game
 		{
 			StartCoroutine (gotoPosition(dest));
 		}
+
+		public void ResetPosition() {
+			transform.position = startPos = endPos = initPosition;
+			transform.rotation = startRot = endRot = initRotation;
+		}
 		
 		void OnEnable()
 		{
-			startPos = endPos = transform.position;
-			startRot = endRot = transform.rotation;
+			initPosition = startPos = endPos = transform.position;
+			initRotation = startRot = endRot = transform.rotation;
 		}
 		
 		void FixedUpdate()
@@ -47,7 +55,6 @@ namespace strange.examples.strangerobots.game
 				if (Vector3.Distance(startPos, endPos) < .01f) {
 					journeyDistance = 0;
 				}
-				//SetObliqueness (0, fracJourney);
 			}
 
 
@@ -60,13 +67,6 @@ namespace strange.examples.strangerobots.game
 			endRot = Quaternion.Euler(destRot);
 			journeyDistance = Vector3.Distance(startPos, endPos);
 			startTime = Time.time;
-		}
-
-		void SetObliqueness(float horizObl, float vertObl) {
-			Matrix4x4 mat = camera.projectionMatrix;
-			mat[0, 2] = horizObl;
-			mat[1, 2] = vertObl;
-			camera.projectionMatrix = mat;
 		}
 	}
 }

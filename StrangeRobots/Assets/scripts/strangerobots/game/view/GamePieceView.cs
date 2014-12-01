@@ -28,19 +28,17 @@ namespace strange.examples.strangerobots.game
 		
 		
 		
-		//When the user selects input (by whatever method we've mapped), the result
-		//arrives in the form of an int. We keep a copy of that int here for analysis.
-		//The value is bitwise...see KeyboardInput and OnscreenControlsView for details.
-		private int input;
+		public void ResetAll() {
+			startTime = 0;
+			journeyDistance = 0;
+			phase = 0;
+		}
 		
 		//Initialize called by the Mediator. Init is a little like
 		//Start()...but by calling it from the Mediator's OnRegister(),
 		//we know the Mediator is in place before doing anything important.
 		internal void Init()
 		{
-
-			
-			
 			startPos = endPos = transform.position;
 			startRot = endRot = transform.rotation;
 		}
