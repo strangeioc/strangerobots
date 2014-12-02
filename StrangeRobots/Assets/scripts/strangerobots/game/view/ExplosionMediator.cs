@@ -4,7 +4,7 @@
 
 //This mediates between the app and the ExplosionView.
 
-//Note that we're not pooling ShipView explosions (nor ShipViews), since they
+//Note that we're not pooling PlayerView explosions (nor PlayerViews), since they
 //are relatively rare in the game.
 
 using System;

@@ -24,14 +24,13 @@ namespace strange.examples.strangerobots.game
 		
 		
 		private float startTime = 0;
-		private float journeyDistance = 0;
 		
 		
 		
 		public void ResetAll() {
 			startTime = 0;
-			journeyDistance = 0;
 			phase = 0;
+			transform.rotation = Quaternion.identity;
 		}
 		
 		//Initialize called by the Mediator. Init is a little like
@@ -58,7 +57,7 @@ namespace strange.examples.strangerobots.game
 		}
 		
 		//Move based on user input
-		void FixedUpdate()
+		void Update()
 		{
 			if (startTime != 0)
 			{
@@ -66,7 +65,6 @@ namespace strange.examples.strangerobots.game
 					float fracJourney = (Time.time - startTime) / journeySeconds;
 					Quaternion q = Quaternion.Slerp (startRot, endRot, fracJourney);
 					transform.rotation = q;
-					Quaternion invertQ = Quaternion.Inverse(q);
 					if (Quaternion.Angle(transform.rotation, endRot) < .1f) {
 						startTime = Time.time;
 						transform.rotation = endRot;

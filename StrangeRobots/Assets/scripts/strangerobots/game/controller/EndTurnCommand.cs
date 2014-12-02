@@ -14,6 +14,9 @@ namespace strange.examples.strangerobots.game
 		
 		[Inject]
 		public IGameModel gameModel { get; set; }
+
+		[Inject]
+		public EndTurnSignal endTurnSignal{ get; set; }
 		
 		public override void Execute ()
 		{
@@ -27,8 +30,8 @@ namespace strange.examples.strangerobots.game
 					level.enemies.RemoveAt(a);
 				}
 			}
+			endTurnSignal.Dispatch ();
 		}
-
 	}
 
 }

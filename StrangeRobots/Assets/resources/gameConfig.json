@@ -1,7 +1,7 @@
 {
-	"initLives": 3,
+	"initLives": 1,
 	"newLifeEvery":1000,
-	"maxLives":9,
+	"maxLives":1,
 	"initRocks":3,
 	"additionalRocksPerLevel":2,
 	"baseRockScore":10,

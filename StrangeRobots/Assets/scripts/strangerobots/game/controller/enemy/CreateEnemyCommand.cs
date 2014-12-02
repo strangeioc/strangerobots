@@ -26,7 +26,7 @@ namespace strange.examples.strangerobots.game
 
 		//The position to place the Rock
 		[Inject]
-		public Vector3 localPos{ get; set; }
+		public Vector3 pos{ get; set; }
 
 		[Inject]
 		public IGameConfig gameConfig{ get; set; }
@@ -38,13 +38,13 @@ namespace strange.examples.strangerobots.game
 			enemyGO.SetActive (true);
 
 			//place it
-			enemyGO.transform.localPosition = localPos;
+			enemyGO.transform.position = pos;
 			enemyGO.layer = LayerMask.NameToLayer ("enemy");
 			//enemyGO.GetComponent<EnemyView> ().level = level;
 
 			enemyGO.transform.parent = gameField.transform;
 			enemy.view = enemyGO.GetComponent<EnemyView>();
-
+			(enemy.view as MonoBehaviour).enabled = true;
 		}
 	}
 }

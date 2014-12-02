@@ -10,7 +10,7 @@ namespace strange.examples.strangerobots.game
 		public string direction { get; set; }
 
 		[Inject(GameElement.PLAYER_SHIP)]
-		public ShipView view { get; set; }
+		public PlayerView view { get; set; }
 		
 		[Inject]
 		public IGameModel gameModel { get; set; }

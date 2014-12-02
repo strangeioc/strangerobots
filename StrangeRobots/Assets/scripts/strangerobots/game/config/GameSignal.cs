@@ -1,4 +1,4 @@
-﻿//All the Signals exclusive to the GameContext
+//All the Signals exclusive to the GameContext
 
 using System;
 using strange.extensions.signal.impl;
@@ -16,9 +16,9 @@ namespace strange.examples.strangerobots.game
 
 	public class EnemyEndAnimationSignal : Signal{}
 
-	//ShipView - reference to the Player's Ship
+	//PlayerView - reference to the Player View
 	//bool - False indicates destruction. True indicates cleanup at end of level.
-	public class DestroyPlayerSignal : Signal<ShipView, bool>{}
+	public class DestroyPlayerSignal : Signal<PlayerView, bool>{}
 
 	//Enemies
 	//int - The level (size) of the rock
@@ -35,5 +35,6 @@ namespace strange.examples.strangerobots.game
 
 	//Turn
 	public class StartTurnSignal : Signal<string>{}
+	public class EndTurnSignal : Signal{}
 }
 

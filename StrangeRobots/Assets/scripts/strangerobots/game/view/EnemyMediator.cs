@@ -22,9 +22,6 @@ namespace strange.examples.strangerobots.game
 		[Inject]
 		public EnemyEndAnimationSignal enemyEndAnimationSignal{ get; set; }
 		
-		[Inject]
-		public StartTurnSignal startTurnSignal { get; set; }
-		
 		//This is the first (important) thing to happen in the Mediator. It tells
 		//you that your mediator has been attached, so it's like Start() or a
 		//Constructor. Do all your startup stuff here

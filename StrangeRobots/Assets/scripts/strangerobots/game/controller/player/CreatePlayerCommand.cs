@@ -1,6 +1,6 @@
-﻿//Create the ShipView
+//Create the PlayerView
 
-//NOTE: We're not using pools to create the ShipView. Arguably we should...
+//NOTE: We're not using pools to create the PlayerView. Arguably we should...
 //or at least store the single instance. As a practical matter, Ship creation
 //and destruction is "rare" in game terms, happening only when the player gets
 //killed or on the turnover of a level. The wastage of resources is therefore trivial.
@@ -21,8 +21,8 @@ namespace strange.examples.strangerobots.game
 
 		public override void Execute ()
 		{
-			if (injectionBinder.GetBinding<ShipView> (GameElement.PLAYER_SHIP) != null)
-				injectionBinder.Unbind<ShipView> (GameElement.PLAYER_SHIP);
+			if (injectionBinder.GetBinding<PlayerView> (GameElement.PLAYER_SHIP) != null)
+				injectionBinder.Unbind<PlayerView> (GameElement.PLAYER_SHIP);
 
 			//add the player's ship
 			GameObject playerStyle = Resources.Load<GameObject> ("Doctor"/* GameElement.PLAYER_SHIP.ToString() */);
@@ -50,7 +50,7 @@ namespace strange.examples.strangerobots.game
 
 			constrolsGO.GetComponent<ControlsView>().target = playerGO.transform;
 
-			injectionBinder.Bind<ShipView> ().ToValue (playerGO.GetComponent<ShipView> ()).ToName (GameElement.PLAYER_SHIP);
+			injectionBinder.Bind<PlayerView> ().ToValue (playerGO.GetComponent<PlayerView> ()).ToName (GameElement.PLAYER_SHIP);
 
 			//Whenever a ship is created, the game is on!
 			gameModel.levelInProgress = true;

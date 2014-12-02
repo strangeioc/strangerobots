@@ -265,8 +265,6 @@
     <Compile Include="Assets\scripts\strangerobots\game\view\ExplosionView.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\view\GameDebugMediator.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\view\GameDebugView.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\view\ShipMediator.cs" />
-    <Compile Include="Assets\scripts\strangerobots\game\view\ShipView.cs" />
     <Compile Include="Assets\scripts\strangerobots\main\MainBootstrap.cs" />
     <Compile Include="Assets\scripts\strangerobots\main\config\MainContext.cs" />
     <Compile Include="Assets\scripts\strangerobots\main\controller\MainStartupCommand.cs" />
@@ -303,6 +301,8 @@
     <Compile Include="Assets\scripts\strangerobots\game\view\EnemyMediator.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\util\GameUtil.cs" />
     <Compile Include="Assets\scripts\strangerobots\game\controller\EndTurnCommand.cs" />
+    <Compile Include="Assets\scripts\strangerobots\game\view\PlayerMediator.cs" />
+    <Compile Include="Assets\scripts\strangerobots\game\view\PlayerView.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

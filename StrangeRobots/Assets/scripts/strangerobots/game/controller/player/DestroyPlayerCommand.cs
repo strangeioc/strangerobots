@@ -1,4 +1,4 @@
-﻿//Destroy the player's ShipView. This can happen for two reasons:
+//Destroy the player's PlayerView. This can happen for two reasons:
 //1. The player got struck by an object (missile, rock, enemy).
 //2. The level/game ended, and we're simply cleaning up.
 
@@ -11,9 +11,9 @@ namespace strange.examples.strangerobots.game
 {
 	public class DestroyPlayerCommand : Command
 	{
-		//Reference to the player's ship
+		//Reference to the player's view
 		[Inject]
-		public ShipView shipView{ get; set; }
+		public PlayerView playerView{ get; set; }
 
 		//Boolean to indicate whether this destruction is for cleanup
 		[Inject]
@@ -39,7 +39,7 @@ namespace strange.examples.strangerobots.game
 		public override void Execute ()
 		{
 			//Gating boolean so we don't double-destroy the player.
-			//This can happen because the ShipView is pretty dumb. It simply reports
+			//This can happen because the PlayerView is pretty dumb. It simply reports
 			//that a collision occurred, so collision with multiple rocks/missiles
 			//can over-report destruction.
 			//Commands are the brains, so we let this Command (together with the model) decide whether
@@ -49,13 +49,13 @@ namespace strange.examples.strangerobots.game
 				return;
 			}
 
-			//Not isEndOfLevel means the ship was in fact destroyed, not just cleaned up
+			//Not isEndOfLevel means the player was in fact killed, not just cleaned up
 			if (!isEndOfLevel)
 			{
 				gameModel.levelInProgress = false;
 
 				//Decrement lives
-				gameModel.lives--;
+				gameModel.lives = 0;
 				updateLivesSignal.Dispatch (gameModel.lives);
 
 				//Blow up the ship!
@@ -63,10 +63,10 @@ namespace strange.examples.strangerobots.game
 				explosionPrototype.transform.localScale = Vector3.one;
 
 				GameObject explosionGO = GameObject.Instantiate (explosionPrototype) as GameObject;
-				Vector3 pos = shipView.transform.localPosition;
+				Vector3 pos = playerView.transform.localPosition;
 				explosionGO.transform.localPosition = pos;
-				explosionGO.rigidbody.velocity = shipView.rigidbody.velocity;
-				explosionGO.transform.parent = shipView.transform.parent;
+				explosionGO.rigidbody.velocity = playerView.rigidbody.velocity;
+				explosionGO.transform.parent = playerView.transform.parent;
 
 
 				//Are we at the end of the game?
@@ -83,9 +83,10 @@ namespace strange.examples.strangerobots.game
 			}
 			//Unbind the current instance. If we create another ship, the new instance will get
 			//re-bound (see CreatePlayerCommand).
-			GameObject.Destroy (shipView.gameObject);
-			if (injectionBinder.GetBinding<ShipView> (GameElement.PLAYER_SHIP) != null)
-				injectionBinder.Unbind<ShipView> (GameElement.PLAYER_SHIP);
+			if (injectionBinder.GetBinding<PlayerView> (GameElement.PLAYER_SHIP) != null)
+				injectionBinder.Unbind<PlayerView> (GameElement.PLAYER_SHIP);
+
+			GameObject.Destroy (playerView.gameObject);
 		}
 
 		//Wait a couple seconds, then request another ship

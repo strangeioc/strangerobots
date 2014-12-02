@@ -7,7 +7,7 @@ using strange.extensions.signal.impl;
 
 namespace strange.examples.strangerobots.game
 {
-	public class ShipView : GamePieceView
+	public class PlayerView : GamePieceView
 	{
 		void OnCollisionEnter(Collision collision) {
 			collisionSignal.Dispatch ();

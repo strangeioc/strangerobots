@@ -22,10 +22,10 @@ namespace strange.examples.strangerobots.game
 				GameObject gameField = injectionBinder.GetInstance<GameObject> (GameElement.GAME_FIELD);
 
 				//Clean up the Player's ship
-				if (injectionBinder.GetBinding<ShipView> (GameElement.PLAYER_SHIP) != null)
+				if (injectionBinder.GetBinding<PlayerView> (GameElement.PLAYER_SHIP) != null)
 				{
-					ShipView shipView = injectionBinder.GetInstance<ShipView> (GameElement.PLAYER_SHIP);
-					destroyPlayerSignal.Dispatch (shipView, true);
+					PlayerView playerView = injectionBinder.GetInstance<PlayerView> (GameElement.PLAYER_SHIP);
+					destroyPlayerSignal.Dispatch (playerView, true);
 				}
 				
 				//Clean up rocks
@@ -36,12 +36,8 @@ namespace strange.examples.strangerobots.game
 				}
 				
 				//Clean up gameboard
-				Transform[] remaining = gameField.GetComponentsInChildren<Transform>();
-				foreach (Transform item in remaining)
-				{
-					if (item.gameObject != gameField)
-						GameObject.Destroy(item.gameObject);
-				}
+				GameObject.Destroy(gameField);
+				injectionBinder.Unbind<GameObject>(GameElement.GAME_FIELD);
 			}
 		}
 	}

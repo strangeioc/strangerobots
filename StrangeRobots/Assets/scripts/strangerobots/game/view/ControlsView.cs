@@ -10,6 +10,9 @@ namespace strange.examples.strangerobots.game
 {
 	public class ControlsView : View
 	{
+		[Inject(StrangeRobotsElement.GAME_CAMERA)]
+		public Camera gameCamera{ get; set; }
+
 		public Transform target;
 		internal Signal<string> moveSignal = new Signal<string> ();
 
@@ -28,7 +31,7 @@ namespace strange.examples.strangerobots.game
 		void Update()
 		{
 			if (Input.GetMouseButtonDown(0) && acceptingInput) {
-				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				Ray ray = gameCamera.ScreenPointToRay(Input.mousePosition);
 				RaycastHit hit;
 				if (Physics.Raycast (ray.origin, ray.direction, out hit, 2000) && controls.Contains(hit.collider.gameObject))
 				{

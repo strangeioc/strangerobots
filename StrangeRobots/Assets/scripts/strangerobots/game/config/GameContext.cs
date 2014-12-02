@@ -67,6 +67,9 @@ namespace strange.examples.strangerobots.game
 			//When a Signal isn't bound to a Command, it needs to be mapped, just like any other injected instance
 			injectionBinder.Bind<GameStartedSignal> ().ToSingleton ();
 			injectionBinder.Bind<LevelStartedSignal> ().ToSingleton ();
+			injectionBinder.Bind<EnemyEndAnimationSignal> ().ToSingleton ();
+			injectionBinder.Bind<PlayerEndAnimationSignal> ().ToSingleton ();
+			injectionBinder.Bind<EndTurnSignal> ().ToSingleton ();
 
 			if (Context.firstContext == this)
 			{
@@ -75,8 +78,6 @@ namespace strange.examples.strangerobots.game
 				injectionBinder.Bind<UpdateLevelSignal> ().ToSingleton ();
 				injectionBinder.Bind<UpdateLivesSignal> ().ToSingleton ();
 				injectionBinder.Bind<UpdateScoreSignal> ().ToSingleton ();
-				injectionBinder.Bind<EnemyEndAnimationSignal> ().ToSingleton ();
-				injectionBinder.Bind<PlayerEndAnimationSignal> ().ToSingleton ();
 			}
 
 
@@ -146,7 +147,7 @@ namespace strange.examples.strangerobots.game
 			mediationBinder.Bind<EnemyView> ().To<EnemyMediator> ();
 			mediationBinder.Bind<ExplosionView> ().To<ExplosionMediator> ();
 			mediationBinder.Bind<GameDebugView> ().To<GameDebugMediator> ();
-			mediationBinder.Bind<ShipView> ().To<ShipMediator> ();
+			mediationBinder.Bind<PlayerView> ().To<PlayerMediator> ();
 			mediationBinder.Bind<ControlsView> ().To<ControlsMediator> ();
 
 		}

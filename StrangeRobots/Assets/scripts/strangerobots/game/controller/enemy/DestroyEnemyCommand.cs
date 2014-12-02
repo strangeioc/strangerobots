@@ -95,7 +95,7 @@ namespace strange.examples.strangerobots.game
 			enemyView.gameObject.SetActive (false);
 
 			//...and store them offscreen
-			enemyView.transform.localPosition = PARKED_POS;
+			enemyView.transform.position = PARKED_POS;
 			pool.ReturnInstance (enemyView.gameObject);
 
 			if (isPointEarning)

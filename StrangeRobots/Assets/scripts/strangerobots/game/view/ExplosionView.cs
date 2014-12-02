@@ -1,4 +1,4 @@
-﻿//A View for the explosion of the ShipView
+﻿//A View for the explosion of the PlayerView
 //This View is attached to the player_explosion prefab in Unity.
 
 using System;

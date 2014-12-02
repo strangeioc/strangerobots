@@ -20,8 +20,12 @@ namespace strange.examples.strangerobots.game
 			magnifier = _config.magnifier;
 			width = _config.width;
 			height = _config.height;
-			enemies = _config.enemies;
-			player = _config.player;
+			enemies = new List<ObjectStatus>();
+			for (int a = 0, aa = _config.enemies.Count; a < aa; a++)
+			{
+				enemies.Add (new ObjectStatus(_config.enemies[a].x, _config.enemies[a].y));
+			}
+			player = new ObjectStatus(_config.player.x, _config.player.y);
 		}
 		
 		public float magnifier { get; set; }
