@@ -92,12 +92,14 @@ namespace strange.extensions.injector.impl
 				
 				IReflectedClass reflection = reflector.Get (reflectionType);
 
-				Type[] parameters = reflection.constructorParameters;
-				int aa = parameters.Length;
+				Type[] parameterTypes = reflection.constructorParameters;
+				object[] parameterNames = reflection.ConstructorParameterNames;
+
+				int aa = parameterTypes.Length;
 				object[] args = new object [aa];
 				for (int a = 0; a < aa; a++)
 				{
-					args [a] = getValueInjection (parameters[a] as Type, null, null);
+					args [a] = getValueInjection (parameterTypes[a] as Type, parameterNames[a], reflectionType);
 				}
 				retv = factory.Get (binding, args);
 
@@ -176,12 +178,14 @@ namespace strange.extensions.injector.impl
 			ConstructorInfo constructor = reflection.constructor;
 			failIf(constructor == null, "Attempt to construction inject a null constructor", InjectionExceptionType.NULL_CONSTRUCTOR);
 
-			Type[] constructorParameters = reflection.constructorParameters;
-			object[] values = new object[constructorParameters.Length];
+			Type[] parameterTypes = reflection.constructorParameters;
+			object[] parameterNames = reflection.ConstructorParameterNames;
+			object[] values = new object[parameterTypes.Length];
+
 			int i = 0;
-			foreach (Type type in constructorParameters)
+			foreach (Type type in parameterTypes)
 			{
-				values[i] = getValueInjection(type, null, target);
+				values[i] = getValueInjection(type, parameterNames[i], target);
 				i++;
 			}
 			if (values.Length == 0)
@@ -210,7 +214,13 @@ namespace strange.extensions.injector.impl
 
 		private object getValueInjection(Type t, object name, object target)
 		{
-			IInjectionBinding binding = binder.GetBinding (t, name);
+			IInjectionBinding suppliedBinding = null;
+			if (target != null)
+			{
+				suppliedBinding = binder.GetSupplier (t, target is Type ? target as Type : target.GetType ());
+			}
+
+			IInjectionBinding binding = suppliedBinding ?? binder.GetBinding (t, name);
 			failIf(binding == null, "Attempt to Instantiate a null binding.", InjectionExceptionType.NULL_BINDING, t, name, target);
 			if (binding.type == InjectionBindingType.VALUE)
 			{

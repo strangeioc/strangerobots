@@ -46,8 +46,8 @@
 
 		//SIGNAL WITH PARAMETERS
 		//Create a new signal with two parameters
- 		Signal<int, string> signal = new Signal<int, string>();
- 		//Add a listener
+		Signal<int, string> signal = new Signal<int, string>();
+		//Add a listener
 		signal.AddListener(callbackWithParamsIntAndString);
 		//Add a listener for the duration of precisely one Dispatch
 		signal.AddOnce(anotherCallbackWithParamsIntAndString);
@@ -61,67 +61,152 @@
 		signal.RemoveListener(callbackWithParamsIntAndString);
  * 
  * @see strange.extensions.signal.api.IBaseSignal
- * @see strange.extensions.signal.impl.BasrSignal
+ * @see strange.extensions.signal.impl.BaseSignal
  */
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace strange.extensions.signal.impl
 {
-	/// Base concrete form for a Signal with no parameters
-	public class Signal : BaseSignal
+	public interface ISignal
 	{
-		public event Action Listener = delegate { };
-		public event Action OnceListener = delegate { };
-		public void AddListener(Action callback) { Listener += callback; }
-		public void AddOnce(Action callback) { OnceListener += callback; }
-		public void RemoveListener(Action callback) { Listener -= callback; }
+		Delegate listener { get; set; }
+		void RemoveAllListeners();
+	}
+	/// Base concrete form for a Signal with no parameters
+	public class Signal : BaseSignal, ISignal
+	{
+		public event Action Listener = null;
+		public event Action OnceListener = null;
+
+		public void AddListener(Action callback)
+		{
+			Listener = this.AddUnique(Listener, callback);
+		}
+
+		public void AddOnce(Action callback)
+		{
+			OnceListener = this.AddUnique(OnceListener, callback);
+		}
+
+		public void RemoveListener(Action callback)
+		{
+			if (Listener != null)
+				Listener -= callback;
+		}
 		public override List<Type> GetTypes()
 		{
 			return new List<Type>();
 		}
 		public void Dispatch()
 		{
-			Listener();
-			OnceListener();
-			OnceListener = delegate { };
+			if (Listener != null)
+				Listener();
+			if (OnceListener != null)
+				OnceListener();
+			OnceListener = null;
 			base.Dispatch(null);
 		}
+
+		private Action AddUnique(Action listeners, Action callback)
+		{
+			if (listeners == null || !listeners.GetInvocationList().Contains(callback))
+			{
+				listeners += callback;
+			}
+			return listeners;
+		}
+
+		public override void RemoveAllListeners()
+		{
+			Listener = null;
+			OnceListener = null;
+			base.RemoveAllListeners();
+		}
+
+		public Delegate listener { get { return Listener; } set { Listener = (Action) value; }}
 	}
 
 	/// Base concrete form for a Signal with one parameter
-	public class Signal<T> : BaseSignal
+	public class Signal<T> : BaseSignal, ISignal
 	{
-		public event Action<T> Listener = delegate { };
-		public event Action<T> OnceListener = delegate { };
-		public void AddListener(Action<T> callback) { Listener += callback; }
-		public void AddOnce(Action<T> callback) { OnceListener += callback; }
-		public void RemoveListener(Action<T> callback) { Listener -= callback; }
-		public override  List<Type> GetTypes() 
-		{ 
+		public event Action<T> Listener = null;
+		public event Action<T> OnceListener = null;
+
+		public void AddListener(Action<T> callback)
+		{
+			Listener = this.AddUnique(Listener, callback);
+		}
+
+		public void AddOnce(Action<T> callback)
+		{
+			OnceListener = this.AddUnique(OnceListener, callback);
+		}
+
+		public void RemoveListener(Action<T> callback)
+		{
+			if (Listener != null)
+				Listener -= callback;
+		}
+		public override List<Type> GetTypes()
+		{
 			List<Type> retv = new List<Type>();
 			retv.Add(typeof(T));
 			return retv;
 		}
 		public void Dispatch(T type1)
 		{
-			Listener(type1);
-			OnceListener(type1);
-			OnceListener = delegate { };
+			if (Listener != null)
+				Listener(type1);
+			if (OnceListener != null)
+				OnceListener(type1);
+			OnceListener = null;
 			object[] outv = { type1 };
 			base.Dispatch(outv);
 		}
+
+		private Action<T> AddUnique(Action<T> listeners, Action<T> callback)
+		{
+			if (listeners == null || !listeners.GetInvocationList().Contains(callback))
+			{
+				listeners += callback;
+			}
+			return listeners;
+		}
+
+		public override void RemoveAllListeners()
+		{
+			Listener = null;
+			OnceListener = null;
+			base.RemoveAllListeners();
+		}
+
+		public Delegate listener { get { return Listener; } set { Listener = (Action<T>) value; } }
 	}
 
 	/// Base concrete form for a Signal with two parameters
-	public class Signal<T, U> : BaseSignal
+	public class Signal<T, U> : BaseSignal, ISignal
 	{
-		public event Action<T, U> Listener = delegate { };
-		public event Action<T, U> OnceListener = delegate { };
-		public void AddListener(Action<T, U> callback) { Listener += callback; }
-		public void AddOnce(Action<T, U> callback) { OnceListener += callback; }
-		public void RemoveListener(Action<T, U> callback) { Listener -= callback; }
+		public event Action<T, U> Listener = null;
+		public event Action<T, U> OnceListener = null;
+
+		public void AddListener(Action<T, U> callback)
+		{
+			Listener = this.AddUnique(Listener, callback);
+		}
+
+		public void AddOnce(Action<T, U> callback)
+		{
+			OnceListener = this.AddUnique(OnceListener, callback);
+		}
+
+		public void RemoveListener(Action<T, U> callback)
+		{
+			if (Listener != null)
+				Listener -= callback;
+		}
 		public override List<Type> GetTypes()
 		{
 			List<Type> retv = new List<Type>();
@@ -131,22 +216,53 @@ namespace strange.extensions.signal.impl
 		}
 		public void Dispatch(T type1, U type2)
 		{
-			Listener(type1, type2);
-			OnceListener(type1, type2);
-			OnceListener = delegate { };
+			if (Listener != null)
+				Listener(type1, type2);
+			if (OnceListener != null)
+				OnceListener(type1, type2);
+			OnceListener = null;
 			object[] outv = { type1, type2 };
 			base.Dispatch(outv);
 		}
+		private Action<T, U> AddUnique(Action<T, U> listeners, Action<T, U> callback)
+		{
+			if (listeners == null || !listeners.GetInvocationList().Contains(callback))
+			{
+				listeners += callback;
+			}
+			return listeners;
+		}
+
+		public override void RemoveAllListeners()
+		{
+			Listener = null;
+			OnceListener = null;
+			base.RemoveAllListeners();
+		}
+		public Delegate listener { get { return Listener; } set { Listener = (Action<T, U>) value; } }
 	}
 
 	/// Base concrete form for a Signal with three parameters
-	public class Signal<T, U, V> : BaseSignal
+	public class Signal<T, U, V> : BaseSignal, ISignal
 	{
-		public event Action<T, U, V> Listener = delegate { };
-		public event Action<T, U, V> OnceListener = delegate { };
-		public void AddListener(Action<T, U, V> callback) { Listener += callback; }
-		public void AddOnce(Action<T, U, V> callback) { OnceListener += callback; }
-		public void RemoveListener(Action<T, U, V> callback) { Listener -= callback; }
+		public event Action<T, U, V> Listener = null;
+		public event Action<T, U, V> OnceListener = null;
+
+		public void AddListener(Action<T, U, V> callback)
+		{
+			Listener = this.AddUnique(Listener, callback);
+		}
+
+		public void AddOnce(Action<T, U, V> callback)
+		{
+			OnceListener = this.AddUnique(OnceListener, callback);
+		}
+
+		public void RemoveListener(Action<T, U, V> callback)
+		{
+			if (Listener != null)
+				Listener -= callback;
+		}
 		public override List<Type> GetTypes()
 		{
 			List<Type> retv = new List<Type>();
@@ -157,22 +273,52 @@ namespace strange.extensions.signal.impl
 		}
 		public void Dispatch(T type1, U type2, V type3)
 		{
-			Listener(type1, type2, type3);
-			OnceListener(type1, type2, type3);
-			OnceListener = delegate { };
+			if (Listener != null)
+				Listener(type1, type2, type3);
+			if (OnceListener != null)
+				OnceListener(type1, type2, type3);
+			OnceListener = null;
 			object[] outv = { type1, type2, type3 };
 			base.Dispatch(outv);
 		}
+		private Action<T, U, V> AddUnique(Action<T, U, V> listeners, Action<T, U, V> callback)
+		{
+			if (listeners == null || !listeners.GetInvocationList().Contains(callback))
+			{
+				listeners += callback;
+			}
+			return listeners;
+		}
+		public override void RemoveAllListeners()
+		{
+			Listener = null;
+			OnceListener = null;
+			base.RemoveAllListeners();
+		}
+		public Delegate listener { get { return Listener; } set { Listener = (Action<T, U, V>) value; } }
 	}
 
 	/// Base concrete form for a Signal with four parameters
-	public class Signal<T, U, V, W> : BaseSignal
+	public class Signal<T, U, V, W> : BaseSignal, ISignal
 	{
-		public event Action<T, U, V, W> Listener = delegate { };
-		public event Action<T, U, V, W> OnceListener = delegate { };
-		public void AddListener(Action<T, U, V, W> callback) { Listener += callback; }
-		public void AddOnce(Action<T, U, V, W> callback) { OnceListener += callback; }
-		public void RemoveListener(Action<T, U, V, W> callback) { Listener -= callback; }
+		public event Action<T, U, V, W> Listener = null;
+		public event Action<T, U, V, W> OnceListener = null;
+
+		public void AddListener(Action<T, U, V, W> callback)
+		{
+			Listener = this.AddUnique(Listener, callback);
+		}
+
+		public void AddOnce(Action<T, U, V, W> callback)
+		{
+			OnceListener = this.AddUnique(OnceListener, callback);
+		}
+
+		public void RemoveListener(Action<T, U, V, W> callback)
+		{
+			if (Listener != null)
+				Listener -= callback;
+		}
 		public override List<Type> GetTypes()
 		{
 			List<Type> retv = new List<Type>();
@@ -184,12 +330,30 @@ namespace strange.extensions.signal.impl
 		}
 		public void Dispatch(T type1, U type2, V type3, W type4)
 		{
-			Listener(type1, type2, type3, type4);
-			OnceListener(type1, type2, type3, type4);
-			OnceListener = delegate { };
+			if (Listener != null)
+				Listener(type1, type2, type3, type4);
+			if (OnceListener != null)
+				OnceListener(type1, type2, type3, type4);
+			OnceListener = null;
 			object[] outv = { type1, type2, type3, type4 };
 			base.Dispatch(outv);
 		}
+
+		private Action<T, U, V, W> AddUnique(Action<T, U, V, W> listeners, Action<T, U, V, W> callback)
+		{
+			if (listeners == null || !listeners.GetInvocationList().Contains(callback))
+			{
+				listeners += callback;
+			}
+			return listeners;
+		}
+		public override void RemoveAllListeners()
+		{
+			Listener = null;
+			OnceListener = null;
+			base.RemoveAllListeners();
+		}
+		public Delegate listener { get { return Listener; } set { Listener = (Action<T, U, V, W>) value; } }
 	}
 
 }
