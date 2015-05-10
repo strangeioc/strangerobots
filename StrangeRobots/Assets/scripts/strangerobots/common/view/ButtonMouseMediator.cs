@@ -24,12 +24,12 @@ namespace strange.examples.strangerobots.ui
 
 		protected void OnMouseEnter()
 		{
-			view.background.renderer.material.color = view.overColor;
+			view.background.GetComponent<UnityEngine.Renderer>().material.color = view.overColor;
 		}
 
 		protected void OnMouseExit()
 		{
-			view.background.renderer.material.color = view.normalColor;
+			view.background.GetComponent<UnityEngine.Renderer>().material.color = view.normalColor;
 		}
 
 		#endif

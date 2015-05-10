@@ -65,7 +65,7 @@ namespace strange.examples.strangerobots.game
 				GameObject explosionGO = GameObject.Instantiate (explosionPrototype) as GameObject;
 				Vector3 pos = playerView.transform.localPosition;
 				explosionGO.transform.localPosition = pos;
-				explosionGO.rigidbody.velocity = playerView.rigidbody.velocity;
+				explosionGO.GetComponent<Rigidbody>().velocity = playerView.GetComponent<Rigidbody>().velocity;
 				explosionGO.transform.parent = playerView.transform.parent;
 
 

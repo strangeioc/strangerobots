@@ -45,7 +45,7 @@ namespace strange.examples.strangerobots
 		public bool IsInCamera(GameObject go)
 		{
 			Plane[] planes = GeometryUtility.CalculateFrustumPlanes (gameCamera);
-			return GeometryUtility.TestPlanesAABB (planes, go.renderer.bounds);
+			return GeometryUtility.TestPlanesAABB (planes, go.GetComponent<Renderer>().bounds);
 		}
 
 		//When a rock or the player exists the screen,

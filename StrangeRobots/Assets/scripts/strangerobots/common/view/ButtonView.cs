@@ -48,13 +48,13 @@ namespace strange.examples.strangerobots
 		internal void pressBegan()
 		{
 			pressSignal.Dispatch ();
-			background.renderer.material.color = pressColor;
+			background.GetComponent<Renderer>().material.color = pressColor;
 		}
 
 		internal void pressEnded()
 		{
 			releaseSignal.Dispatch ();
-			background.renderer.material.color = normalColor;
+			background.GetComponent<Renderer>().material.color = normalColor;
 		}
 	}
 }

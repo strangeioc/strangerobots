@@ -59,7 +59,7 @@ namespace strange.examples.strangerobots.ui
 					GameObject go = GameObject.Instantiate (proto) as GameObject;
 					go.transform.parent = proto.transform.parent;
 					Vector3 pos = proto.transform.localPosition;
-					pos.x = pos.x - (go.renderer.bounds.size.x * a);
+					pos.x = pos.x - (go.GetComponent<Renderer>().bounds.size.x * a);
 					go.transform.localPosition = pos;
 					livesGOs [a] = go;
 				}

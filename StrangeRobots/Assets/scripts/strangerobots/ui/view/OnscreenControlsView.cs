@@ -45,21 +45,21 @@ namespace strange.examples.strangerobots.ui
 
 			Vector3 leftPos = 
 				screenUtil.GetAnchorPosition (ScreenAnchor.LEFT, ScreenAnchor.BOTTOM) - transform.localPosition;
-			leftPos.x += rotateLeftButton.background.renderer.bounds.size.x;
-			leftPos.z += rotateLeftButton.background.renderer.bounds.size.z;
+			leftPos.x += rotateLeftButton.background.GetComponent<Renderer>().bounds.size.x;
+			leftPos.z += rotateLeftButton.background.GetComponent<Renderer>().bounds.size.z;
 			rotateLeftButton.transform.localPosition = leftPos;
 
 			Vector3 rightPos = screenUtil.GetAnchorPosition (ScreenAnchor.RIGHT, ScreenAnchor.BOTTOM) - transform.localPosition;
-			rightPos.x -= rotateRightButton.background.renderer.bounds.size.x;
-			rightPos.z += rotateRightButton.background.renderer.bounds.size.z;
+			rightPos.x -= rotateRightButton.background.GetComponent<Renderer>().bounds.size.x;
+			rightPos.z += rotateRightButton.background.GetComponent<Renderer>().bounds.size.z;
 			rotateRightButton.transform.localPosition = rightPos;
 
 			Vector3 thrustPos = rotateLeftButton.transform.localPosition;
-			thrustPos.z += rotateLeftButton.background.renderer.bounds.size.z;
+			thrustPos.z += rotateLeftButton.background.GetComponent<Renderer>().bounds.size.z;
 			thrustButton.transform.localPosition = thrustPos;
 
 			Vector3 firePos = rotateRightButton.transform.localPosition;
-			firePos.z += rotateRightButton.background.renderer.bounds.size.z;
+			firePos.z += rotateRightButton.background.GetComponent<Renderer>().bounds.size.z;
 			fireButton.transform.localPosition = firePos;
 		}
 
